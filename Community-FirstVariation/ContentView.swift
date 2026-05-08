@@ -14,6 +14,22 @@ struct Product: Identifiable {
     let imageName: String
 }
 
+struct MessageThread: Identifiable {
+    let id = UUID()
+    let sender: String
+    let lastMessage: String
+    let timestamp: String
+    let isUnread: Bool
+}
+
+let mockThreads = [
+    MessageThread(sender: "Sarah", lastMessage: "Is the jacket still available?", timestamp: "10:30 AM", isUnread: true),
+    MessageThread(sender: "Mike", lastMessage: "Thanks for the rental!", timestamp: "Yesterday", isUnread: false),
+    MessageThread(sender: "Alex", lastMessage: "Can we meet at 5pm?", timestamp: "Wednesday", isUnread: true),
+    MessageThread(sender: "Emma", lastMessage: "The dress fits perfectly!", timestamp: "Monday", isUnread: false),
+    MessageThread(sender: "John", lastMessage: "Sent you the location.", timestamp: "Last Week", isUnread: false),
+]
+
 let mockProducts = [
     Product(name: "Graphic T-Shirt", price: "Free", imageName: "tshirt.fill"),
     Product(name: "Denim Jacket", price: "Free", imageName: "tshirt.fill"),
@@ -89,7 +105,7 @@ struct ContentView: View {
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(mockProducts) { product in
                                 NavigationLink {
-                                    test()
+                                    ItemDetailView(product: product)
                                 } label: {
                                     VStack(alignment: .leading, spacing: 8) {
                                         ZStack {
@@ -134,13 +150,9 @@ struct ContentView: View {
                 Label("Explore", systemImage: "safari")
             }
             
-            NavigationStack {
-                Text("Inbox")
-                    .font(.largeTitle)
-                    .navigationTitle("Inbox")
-            }
+            InboxView()
             .tabItem {
-                Label("Inbox", systemImage: "tray.fill")
+                Label("Inbox", systemImage: "bubble.left.and.bubble.right.fill")
             }
             
             NavigationStack {
@@ -157,6 +169,58 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+}
+
+
+struct InboxView: View {
+    var body: some View {
+        NavigationStack {
+            List(mockThreads) { thread in
+                HStack(spacing: 15) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.blue.opacity(0.1))
+                            .frame(width: 55, height: 55)
+                        
+                        Text(String(thread.sender.prefix(1)))
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text(thread.sender)
+                                .font(.headline)
+                            Spacer()
+                            Text(thread.timestamp)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        HStack {
+                            Text(thread.lastMessage)
+                                .font(.subheadline)
+                                .foregroundColor(thread.isUnread ? .primary : .secondary)
+                                .lineLimit(2)
+                            
+                            Spacer()
+                            
+                            if thread.isUnread {
+                                Circle()
+                                    .fill(Color.blue)
+                                    .frame(width: 10, height: 10)
+                            }
+                        }
+                    }
+                }
+                .padding(.vertical, 8)
+                .listRowSeparator(.hidden)
+            }
+            .listStyle(.plain)
+            .navigationTitle("Messages")
+        }
+    }
 }
 
 struct FilterMenu: View {
