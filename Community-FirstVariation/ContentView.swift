@@ -7,18 +7,179 @@
 
 import SwiftUI
 
+struct Product: Identifiable {
+    let id = UUID()
+    let name: String
+    let price: String
+    let imageName: String
+}
+
+let mockProducts = [
+    Product(name: "Graphic T-Shirt", price: "Free", imageName: "tshirt.fill"),
+    Product(name: "Denim Jacket", price: "Free", imageName: "tshirt.fill"),
+    Product(name: "Slim Fit Jeans", price: "Free", imageName: "tshirt.fill"),
+    Product(name: "Summer Dress", price: "Free", imageName: "tshirt.fill"),
+    Product(name: "Leather Boots", price: "Free", imageName: "shoeprints.fill"),
+    Product(name: "Canvas Backpack", price: "Free", imageName: "backpack.fill"),
+    Product(name: "Cotton Hoodie", price: "Free", imageName: "tshirt.fill"),
+    Product(name: "Woolen Cap", price: "Free", imageName: "sparkles"),
+]
+
 struct ContentView: View {
+    @State private var searchText = ""
+    @State private var isBuyingEnabled = false
+    
+    let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("hello IOS")
+        TabView {
+            NavigationStack {
+                VStack(spacing: 0) {
+                    // Search Bar
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.secondary)
+                        TextField("Search anything...", text: $searchText)
+                    }
+                    .padding(12)
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                    )
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                    
+                    // Filter Bar
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            // Buying Toggle
+                            Button(action: { isBuyingEnabled.toggle() }) {
+                                HStack(spacing: 6) {
+                                    Text("Buying")
+                                        .font(.subheadline)
+                                    if isBuyingEnabled {
+                                        Image(systemName: "checkmark")
+                                            .font(.caption2)
+                                    }
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(isBuyingEnabled ? Color.blue.opacity(0.1) : Color.gray.opacity(0.1))
+                                .cornerRadius(20)
+                                .foregroundColor(isBuyingEnabled ? .blue : .primary)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(isBuyingEnabled ? Color.blue : Color.clear, lineWidth: 1)
+                                )
+                            }
+                            
+                            FilterMenu(title: "Category", options: ["Tops", "Bottoms", "Accessories", "Shoes"])
+                            FilterMenu(title: "Size", options: ["XS", "S", "M", "L", "XL"])
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                    }
+                    
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 20) {
+                            ForEach(mockProducts) { product in
+                                NavigationLink {
+                                    test()
+                                } label: {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .fill(Color.gray.opacity(0.1))
+                                                .aspectRatio(1, contentMode: .fit)
+                                            
+                                            Image(systemName: product.imageName)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 60, height: 60)
+                                                .foregroundColor(.gray)
+                                        }
+                                        
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(product.name)
+                                                .font(.headline)
+                                                .foregroundColor(.primary)
+                                            
+                                            Text(product.price)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .padding(.horizontal, 4)
+                                    }
+                                }
+                            }
+                        }
+                        .padding()
+                    }
+                }
+                .background(Color.white)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Renturn")
+                            .font(.system(size: 40, weight: .bold))
+                            .offset(y: 20)
+                    }
+                }
+            }
+            .tabItem {
+                Label("Explore", systemImage: "safari")
+            }
+            
+            NavigationStack {
+                Text("Inbox")
+                    .font(.largeTitle)
+                    .navigationTitle("Inbox")
+            }
+            .tabItem {
+                Label("Inbox", systemImage: "tray.fill")
+            }
+            
+            NavigationStack {
+                Text("Profile")
+                    .font(.largeTitle)
+                    .navigationTitle("Profile")
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.fill")
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+}
+
+struct FilterMenu: View {
+    let title: String
+    let options: [String]
+    
+    var body: some View {
+        Menu {
+            ForEach(options, id: \.self) { option in
+                Button(option) { }
+            }
+        } label: {
+            HStack {
+                Text(title)
+                    .font(.subheadline)
+                Image(systemName: "chevron.down")
+                    .font(.caption2)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(20)
+            .foregroundColor(.primary)
+        }
+    }
 }
