@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ItemDetailView: View {
     let product: Product
+    let isBuying: Bool
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -33,7 +34,7 @@ struct ItemDetailView: View {
                         Text(product.name)
                             .font(.system(size: 28, weight: .bold))
                         Spacer()
-                        Text(product.price)
+                        Text(isBuying ? "" : product.price)
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
@@ -85,9 +86,9 @@ struct ItemDetailView: View {
                     }
                     
                     NavigationLink {
-                        ChatView(product: product)
+                        ChatView(product: product, isBuying: isBuying)
                     } label: {
-                        Text("Rent this item")
+                        Text(isBuying ? "Buy for free" : "Rent this item")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
@@ -121,6 +122,7 @@ struct ItemDetailView: View {
 
 struct ChatView: View {
     let product: Product
+    let isBuying: Bool
     @State private var messageText = ""
     
     var body: some View {
@@ -129,7 +131,7 @@ struct ChatView: View {
                 VStack(alignment: .leading, spacing: 15) {
                     HStack {
                         Spacer()
-                        Text("Hi! I'd love to rent your \(product.name). Is it available for the upcoming weekend?")
+                        Text(isBuying ? "Hey! Can I grab your \(product.name)? It's so cool!" : "Is it cool if I take your \(product.name) for the weekend?")
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
@@ -137,7 +139,7 @@ struct ChatView: View {
                     }
                     
                     HStack {
-                        Text("Hello! Yes, it's available. Where are you located?")
+                        Text("Yeah totally! It's yours. When do you want it?")
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(15)
@@ -170,6 +172,6 @@ struct ChatView: View {
 
 #Preview {
     NavigationStack {
-        ItemDetailView(product: Product(name: "Sample Item", price: "Free", imageName: "tshirt.fill", ownerName: "Sarah"))
+        ItemDetailView(product: Product(name: "Sample Item", price: "Free", imageName: "tshirt.fill", ownerName: "Sarah"), isBuying: false)
     }
 }

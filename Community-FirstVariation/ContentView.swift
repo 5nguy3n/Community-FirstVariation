@@ -24,11 +24,11 @@ struct MessageThread: Identifiable {
 }
 
 let mockThreads = [
-    MessageThread(sender: "Kai", lastMessage: "Can I borrow your jacket?", timestamp: "10:30 AM", isUnread: true),
-    MessageThread(sender: "Bob", lastMessage: "Thanks for the rental!", timestamp: "Yesterday", isUnread: false),
-    MessageThread(sender: "Fiona", lastMessage: "Can I come over at 5 to pick up!", timestamp: "Wednesday", isUnread: false),
-    MessageThread(sender: "Sophie", lastMessage: "The dress fits really good!", timestamp: "Monday", isUnread: true),
-    MessageThread(sender: "Aaron", lastMessage: "Sent you the location.", timestamp: "3/6/26", isUnread: false),
+    MessageThread(sender: "Kai", lastMessage: "Can I grab that jacket??", timestamp: "10:30 AM", isUnread: true),
+    MessageThread(sender: "Bob", lastMessage: "Thanks for the loan!!", timestamp: "Yesterday", isUnread: false),
+    MessageThread(sender: "Fiona", lastMessage: "Can I come over at 5 to pick up?", timestamp: "Wed", isUnread: false),
+    MessageThread(sender: "Sophie", lastMessage: "The dress looks so good!", timestamp: "Mon", isUnread: true),
+    MessageThread(sender: "Aaron", lastMessage: "Sent you the address.", timestamp: "Last Week", isUnread: false),
 ]
 
 let mockProducts = [
@@ -106,7 +106,7 @@ struct ContentView: View {
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(mockProducts) { product in
                                 NavigationLink {
-                                    ItemDetailView(product: product)
+                                    ItemDetailView(product: product, isBuying: isBuyingEnabled)
                                 } label: {
                                     VStack(alignment: .leading, spacing: 8) {
                                         ZStack {
@@ -126,7 +126,7 @@ struct ContentView: View {
                                                 .font(.headline)
                                                 .foregroundColor(.primary)
                                             
-                                            Text(product.price)
+                                            Text(isBuyingEnabled ? "Buying for Free" : product.price)
                                                 .font(.subheadline)
                                                 .foregroundColor(.secondary)
                                         }
@@ -148,21 +148,17 @@ struct ContentView: View {
                 }
             }
             .tabItem {
-                Label("Rent", systemImage: "safari")
+                Label("EXPLORE", systemImage: "safari")
             }
             
             InboxView()
             .tabItem {
-                Label("Chats", systemImage: "bubble.left.and.bubble.right.fill")
+                Label("INBOX", systemImage: "bubble.left")
             }
             
-            NavigationStack {
-                Text("Profile")
-                    .font(.largeTitle)
-                    .navigationTitle("Profile")
-            }
+            ProfileView(products: mockProducts)
             .tabItem {
-                Label("Profile", systemImage: "person.fill")
+                Label("PROFILE", systemImage: "person")
             }
         }
     }
