@@ -12,6 +12,7 @@ struct Product: Identifiable {
     let name: String
     let price: String
     let imageName: String
+    let ownerName: String
 }
 
 struct MessageThread: Identifiable {
@@ -23,22 +24,22 @@ struct MessageThread: Identifiable {
 }
 
 let mockThreads = [
-    MessageThread(sender: "Sarah", lastMessage: "Is the jacket still available?", timestamp: "10:30 AM", isUnread: true),
-    MessageThread(sender: "Mike", lastMessage: "Thanks for the rental!", timestamp: "Yesterday", isUnread: false),
-    MessageThread(sender: "Alex", lastMessage: "Can we meet at 5pm?", timestamp: "Wednesday", isUnread: true),
-    MessageThread(sender: "Emma", lastMessage: "The dress fits perfectly!", timestamp: "Monday", isUnread: false),
-    MessageThread(sender: "John", lastMessage: "Sent you the location.", timestamp: "Last Week", isUnread: false),
+    MessageThread(sender: "Kai", lastMessage: "Can I borrow your jacket?", timestamp: "10:30 AM", isUnread: true),
+    MessageThread(sender: "Bob", lastMessage: "Thanks for the rental!", timestamp: "Yesterday", isUnread: false),
+    MessageThread(sender: "Fiona", lastMessage: "Can I come over at 5 to pick up!", timestamp: "Wednesday", isUnread: false),
+    MessageThread(sender: "Sophie", lastMessage: "The dress fits really good!", timestamp: "Monday", isUnread: true),
+    MessageThread(sender: "Aaron", lastMessage: "Sent you the location.", timestamp: "3/6/26", isUnread: false),
 ]
 
 let mockProducts = [
-    Product(name: "Graphic T-Shirt", price: "Free", imageName: "tshirt.fill"),
-    Product(name: "Denim Jacket", price: "Free", imageName: "tshirt.fill"),
-    Product(name: "Slim Fit Jeans", price: "Free", imageName: "tshirt.fill"),
-    Product(name: "Summer Dress", price: "Free", imageName: "tshirt.fill"),
-    Product(name: "Leather Boots", price: "Free", imageName: "shoeprints.fill"),
-    Product(name: "Canvas Backpack", price: "Free", imageName: "backpack.fill"),
-    Product(name: "Cotton Hoodie", price: "Free", imageName: "tshirt.fill"),
-    Product(name: "Woolen Cap", price: "Free", imageName: "sparkles"),
+    Product(name: "Graphic T-Shirt", price: "Free", imageName: "tshirt.fill", ownerName: "Sarah"),
+    Product(name: "Denim Jacket", price: "Free", imageName: "jacket.fill", ownerName: "Mike"),
+    Product(name: "Slim Fit Jeans", price: "Free", imageName: "shorts.fill", ownerName: "Alex"),
+    Product(name: "Summer Dress", price: "Free", imageName: "dresses.fill", ownerName: "Emma"),
+    Product(name: "Leather Boots", price: "Free", imageName: "shoeprints.fill", ownerName: "John"),
+    Product(name: "Red Backpack", price: "Free", imageName: "backpack.fill", ownerName: "Kai"),
+    Product(name: "Cotton Hoodie", price: "Free", imageName: "jumper.fill", ownerName: "Fiona"),
+    Product(name: "Woolen Cap", price: "Free", imageName: "sparkles", ownerName: "Bob"),
 ]
 
 struct ContentView: View {
@@ -147,12 +148,12 @@ struct ContentView: View {
                 }
             }
             .tabItem {
-                Label("Explore", systemImage: "safari")
+                Label("Rent", systemImage: "safari")
             }
             
             InboxView()
             .tabItem {
-                Label("Inbox", systemImage: "bubble.left.and.bubble.right.fill")
+                Label("Chats", systemImage: "bubble.left.and.bubble.right.fill")
             }
             
             NavigationStack {
@@ -170,51 +171,53 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
-
+     
 
 struct InboxView: View {
     var body: some View {
         NavigationStack {
             List(mockThreads) { thread in
-                HStack(spacing: 15) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.blue.opacity(0.1))
-                            .frame(width: 55, height: 55)
-                        
-                        Text(String(thread.sender.prefix(1)))
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(.blue)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(thread.sender)
-                                .font(.headline)
-                            Spacer()
-                            Text(thread.timestamp)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                NavigationLink(destination: ChatDetailView(thread: thread)) {
+                    HStack(spacing: 15) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.blue.opacity(0.1))
+                                .frame(width: 55, height: 55)
+                            
+                            Text(String(thread.sender.prefix(1)))
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .foregroundColor(.blue)
                         }
                         
-                        HStack {
-                            Text(thread.lastMessage)
-                                .font(.subheadline)
-                                .foregroundColor(thread.isUnread ? .primary : .secondary)
-                                .lineLimit(2)
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(thread.sender)
+                                    .font(.headline)
+                                Spacer()
+                                Text(thread.timestamp)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
                             
-                            Spacer()
-                            
-                            if thread.isUnread {
-                                Circle()
-                                    .fill(Color.blue)
-                                    .frame(width: 10, height: 10)
+                            HStack {
+                                Text(thread.lastMessage)
+                                    .font(.subheadline)
+                                    .foregroundColor(thread.isUnread ? .primary : .secondary)
+                                    .lineLimit(2)
+                                
+                                Spacer()
+                                
+                                if thread.isUnread {
+                                    Circle()
+                                        .fill(Color.blue)
+                                        .frame(width: 10, height: 10)
+                                }
                             }
                         }
                     }
+                    .padding(.vertical, 8)
                 }
-                .padding(.vertical, 8)
                 .listRowSeparator(.hidden)
             }
             .listStyle(.plain)

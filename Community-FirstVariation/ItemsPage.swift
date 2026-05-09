@@ -75,7 +75,7 @@ struct ItemDetailView: View {
                 // Action Buttons
                 VStack(spacing: 12) {
                     Button(action: {}) {
-                        Text("Add to Cart")
+                        Text("Save this Item")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
@@ -129,7 +129,7 @@ struct ChatView: View {
                 VStack(alignment: .leading, spacing: 15) {
                     HStack {
                         Spacer()
-                        Text("Hi! I'm interested in renting your \(product.name). Is it available for next weekend?")
+                        Text("Hi! I'd love to rent your \(product.name). Is it available for the upcoming weekend?")
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
@@ -150,7 +150,7 @@ struct ChatView: View {
             Divider()
             
             HStack {
-                TextField("Message owner...", text: $messageText)
+                TextField("Message \(product.ownerName)...", text: $messageText)
                     .padding(12)
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(20)
@@ -163,7 +163,13 @@ struct ChatView: View {
             }
             .padding()
         }
-        .navigationTitle("Chat with Owner")
+        .navigationTitle("Chat with \(product.ownerName)")
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+#Preview {
+    NavigationStack {
+        ItemDetailView(product: Product(name: "Sample Item", price: "Free", imageName: "tshirt.fill", ownerName: "Sarah"))
     }
 }
