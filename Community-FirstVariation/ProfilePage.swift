@@ -13,38 +13,32 @@ struct ProfileView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // App Header
-            HStack {
+            // Centered App Header
+            ZStack {
                 Text("Renturn")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color(red: 0.1, green: 0.2, blue: 0.45))
-                Spacer()
-                Image(systemName: "bag")
-                    .font(.system(size: 20))
-                    .padding(8)
-                    .background(Color.white)
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2), lineWidth: 1))
+                
+                HStack {
+                    Spacer()
+                    Image(systemName: "bag")
+                        .font(.system(size: 20))
+                        .padding(8)
+                        .background(Color.white)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.2), lineWidth: 1))
+                }
             }
             .padding(.horizontal)
             .padding(.vertical, 10)
             .background(Color.white)
             
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Profile Header Section
-                    HStack(alignment: .top) {
-                        // Profile Pic with Circular Badge
+                VStack(alignment: .leading, spacing: 0) {
+                    
+                    // Profile Header: Pic + Info Next to it
+                    HStack(alignment: .center, spacing: 20) {
+                        // Profile Picture
                         ZStack {
-                            // Simulated circular text/border
-                            Circle()
-                                .strokeBorder(Color.green.opacity(0.2), lineWidth: 10)
-                                .frame(width: 100, height: 100)
-                                .overlay(
-                                    Text("SUSTAINABLE STORE • CO2 SAVED")
-                                        .font(.system(size: 6, weight: .bold))
-                                        .foregroundColor(.green.opacity(0.6))
-                                        // In a real app we'd use a custom view for curved text
-                                )
                             
                             Image(systemName: "person.crop.circle.fill")
                                 .resizable()
@@ -52,50 +46,38 @@ struct ProfileView: View {
                                 .foregroundColor(.gray.opacity(0.2))
                                 .clipShape(Circle())
                             
-                            // Verified Badge
-                            Image(systemName: "checkmark.seal.fill")
-                                .foregroundColor(.blue)
-                                .background(Color.white.clipShape(Circle()))
-                                .offset(x: 30, y: 30)
+                           
+                        }
+                        
+                        // Username and Stats Row
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("christina_lee")
+                                .font(.system(size: 22, weight: .black))
+                            
+                            HStack(spacing: 25) {
+                                StatItem(value: "4.9", label: "RATING", hasStar: true)
+                                StatItem(value: "12", label: "LISTINGS")
+                                StatItem(value: "54", label: "FOLLOWERS")
+                            }
                         }
                         
                         Spacer()
-                        
-                        // Settings Gear
-                        Button(action: {}) {
-                            Image(systemName: "gearshape")
-                                .font(.system(size: 20))
-                                .foregroundColor(.gray)
-                                .padding(10)
-                                .background(Color.gray.opacity(0.05))
-                                .cornerRadius(12)
-                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                    
+                    // Bio
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Hello, explore my rentals for the sustainable soul and put my clothes to good use 🌿 ")
+                            .font(.system(size: 14))
+                            .foregroundColor(.primary.opacity(0.8))
+                            .lineSpacing(2)
                     }
                     .padding(.horizontal)
                     .padding(.top, 10)
                     
-                    // Username & Bio
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 8) {
-                            Text("vogue_vintage")
-                                .font(.system(size: 28, weight: .bold))
-                            
-                            
-                        }
-                        
-                        Text("Vogue Vintage Boutique")
-                            .font(.system(size: 16))
-                            .foregroundColor(.gray)
-                        
-                        // Stats Row
-                        HStack(spacing: 30) {
-                            StatItem(value: "4.9", label: "RATING", hasStar: true)
-                            StatItem(value: "28", label: "LISTINGS")
-                            StatItem(value: "1.2k", label: "FOLLOWERS")
-                        }
-                    
-                    }
-                    .padding(.horizontal)
+                    // Controlled gap
+                    Spacer().frame(height: 20)
                     
                     // Action Buttons
                     HStack(spacing: 12) {
@@ -104,41 +86,44 @@ struct ProfileView: View {
                                 Image(systemName: "plus")
                                 Text("List Item")
                             }
-                            .font(.system(size: 16, weight: .bold))
+                            .font(.system(size: 15, weight: .bold))
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
+                            .padding(.vertical, 14)
                             .background(Color(red: 0.1, green: 0.2, blue: 0.5))
                             .foregroundColor(.white)
-                            .cornerRadius(16)
+                            .cornerRadius(12)
                         }
                         
                         Button(action: {}) {
                             Text("Edit Profile")
-                                .font(.system(size: 16, weight: .semibold))
+                                .font(.system(size: 15, weight: .semibold))
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
+                                .padding(.vertical, 14)
                                 .background(Color.gray.opacity(0.08))
                                 .foregroundColor(.primary)
-                                .cornerRadius(16)
+                                .cornerRadius(12)
                         }
                         
                         Button(action: {}) {
                             Image(systemName: "square.and.arrow.up")
-                                .padding(16)
+                                .font(.system(size: 15))
+                                .padding(14)
                                 .background(Color.gray.opacity(0.08))
-                                .cornerRadius(16)
+                                .cornerRadius(12)
                         }
                     }
                     .padding(.horizontal)
+                    
+                    Spacer().frame(height: 30)
                     
                     // Custom Tab Bar
                     VStack(spacing: 0) {
                         HStack {
                             TabButton(title: "PLANNING", isSelected: selectedTab == "PLANNING") { selectedTab = "PLANNING" }
                             TabButton(title: "RENTALS", isSelected: selectedTab == "RENTALS") { selectedTab = "RENTALS" }
+                            TabButton(title: "PURCHASE", isSelected: selectedTab == "PURCHASE") { selectedTab = "PURCHASE" }
                             TabButton(title: "SAVED", isSelected: selectedTab == "SAVED") { selectedTab = "SAVED" }
                         }
-                        .padding(.top, 10)
                         Divider()
                     }
                     
@@ -146,10 +131,9 @@ struct ProfileView: View {
                     if selectedTab == "PLANNING" {
                         PlanningTabView()
                     } else {
-                        // Placeholder for other tabs
                         VStack {
-                            Spacer()
-                            Text("\(selectedTab) Content")
+                            Spacer(minLength: 100)
+                            Text("\(selectedTab) Content Coming Soon")
                                 .foregroundColor(.gray)
                             Spacer()
                         }
@@ -170,18 +154,18 @@ struct StatItem: View {
     var hasStar: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack(spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 2) {
                 Text(value)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 16, weight: .bold))
                 if hasStar {
                     Image(systemName: "star.fill")
-                        .font(.system(size: 12))
+                        .font(.system(size: 10))
                         .foregroundColor(.orange)
                 }
             }
             Text(label)
-                .font(.system(size: 10, weight: .bold))
+                .font(.system(size: 8, weight: .bold))
                 .foregroundColor(.gray)
         }
     }
@@ -196,7 +180,7 @@ struct TabButton: View {
         Button(action: action) {
             VStack(spacing: 12) {
                 Text(title)
-                    .font(.system(size: 12, weight: .bold))
+                    .font(.system(size: 11, weight: .bold))
                     .foregroundColor(isSelected ? Color(red: 0.1, green: 0.2, blue: 0.5) : .gray.opacity(0.6))
                 
                 Rectangle()
@@ -210,82 +194,78 @@ struct TabButton: View {
 
 struct PlanningTabView: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 15) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Rental Planner")
-                    .font(.system(size: 28, weight: .bold))
+                    .font(.system(size: 24, weight: .bold))
                 Text("MANAGE YOUR CLOSET SCHEDULE")
-                    .font(.system(size: 10, weight: .bold))
+                    .font(.system(size: 9, weight: .bold))
                     .foregroundColor(.gray)
             }
             .padding(.horizontal)
             .padding(.top, 20)
             
-            // Planner Stats Cards
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 PlannerCard(value: "3", label: "TOTAL BOOKINGS", color: .blue)
                 PlannerCard(value: "1", label: "ACTIVE NOW", color: .green)
                 PlannerCard(value: "2", label: "PENDING", color: .orange)
             }
             .padding(.horizontal)
             
-            // Calendar View Placeholder
-            VStack(spacing: 20) {
+            VStack(spacing: 15) {
                 HStack {
                     Image(systemName: "calendar")
                         .foregroundColor(.blue)
-                        .padding(8)
+                        .padding(6)
                         .background(Color.blue.opacity(0.1))
-                        .cornerRadius(8)
+                        .cornerRadius(6)
                     
                     Text("February 2026")
-                        .font(.headline)
+                        .font(.system(size: 16, weight: .bold))
                     
                     Spacer()
                     
-                    HStack(spacing: 15) {
+                    HStack(spacing: 12) {
                         Image(systemName: "chevron.left")
                         Image(systemName: "chevron.right")
                     }
-                    .font(.system(size: 14))
+                    .font(.system(size: 12))
                     .foregroundColor(.gray)
                 }
                 .padding(.horizontal)
                 
-                // Days of week
                 HStack {
                     ForEach(["S", "M", "T", "W", "T", "F", "S"], id: \.self) { day in
                         Text(day)
-                            .font(.system(size: 12, weight: .bold))
+                            .font(.system(size: 15, weight: .bold))
                             .foregroundColor(.gray.opacity(0.4))
                             .frame(maxWidth: .infinity)
                     }
                 }
                 .padding(.horizontal)
                 
-                // Simplified Dates Grid
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 15) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 12) {
                     ForEach(1...28, id: \.self) { day in
                         Text("\(day)")
-                            .font(.system(size: 14, weight: .medium))
+                            .font(.system(size: 12, weight: .medium))
                             .foregroundColor(day == 14 ? .white : .primary)
-                            .frame(width: 30, height: 30)
+                            .frame(width: 26, height: 26)
                             .background(day == 14 ? Color.blue : Color.clear)
                             .clipShape(Circle())
                     }
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.bottom, 15)
             }
             .padding(.vertical)
             .background(Color.white)
-            .cornerRadius(24)
+            .cornerRadius(20)
             .padding(.horizontal)
             
-            Spacer(minLength: 100)
+            Spacer(minLength: 80)
         }
         .frame(maxWidth: .infinity)
-        .background(Color(red: 0.96, green: 0.95, blue: 0.93)) // Light beige background
+        .background(Color(red: 0.96, green: 0.95, blue: 0.93))
     }
 }
 
@@ -295,19 +275,19 @@ struct PlannerCard: View {
     let color: Color
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .font(.system(size: 24, weight: .bold))
+                .font(.system(size: 20, weight: .bold))
                 .foregroundColor(color)
             
             Text(label)
-                .font(.system(size: 8, weight: .bold))
+                .font(.system(size: 7, weight: .bold))
                 .foregroundColor(.gray)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(15)
+        .padding(12)
         .background(Color.white)
-        .cornerRadius(16)
+        .cornerRadius(12)
     }
 }
 

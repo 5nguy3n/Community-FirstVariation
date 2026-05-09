@@ -142,8 +142,8 @@ struct ContentView: View {
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         Text("Renturn")
-                            .font(.system(size: 40, weight: .bold))
-                            .offset(y: 20)
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(Color(red: 0.1, green: 0.2, blue: 0.45))
                     }
                 }
             }
@@ -217,7 +217,7 @@ struct InboxView: View {
                 .listRowSeparator(.hidden)
             }
             .listStyle(.plain)
-            .navigationTitle("Messages")
+            .navigationTitle("INBOX")
         }
     }
 }

@@ -34,7 +34,7 @@ struct ItemDetailView: View {
                         Text(product.name)
                             .font(.system(size: 28, weight: .bold))
                         Spacer()
-                        Text(isBuying ? "" : product.price)
+                        Text(isBuying ? "Buying for Free" : product.price)
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
