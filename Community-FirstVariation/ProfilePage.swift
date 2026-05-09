@@ -58,6 +58,7 @@ struct ProfileView: View {
                                 StatItem(value: "4.9", label: "RATING", hasStar: true)
                                 StatItem(value: "12", label: "LISTINGS")
                                 StatItem(value: "54", label: "FOLLOWERS")
+                                    
                             }
                         }
                         
@@ -67,14 +68,14 @@ struct ProfileView: View {
                     .padding(.top, 20)
                     
                     // Bio
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 0) {
                         Text("Hello, explore my rentals for the sustainable soul and put my clothes to good use 🌿 ")
                             .font(.system(size: 14))
                             .foregroundColor(.primary.opacity(0.8))
                             .lineSpacing(2)
                     }
                     .padding(.horizontal)
-                    .padding(.top, 10)
+                    .padding(.top, 25)
                     
                     // Controlled gap
                     Spacer().frame(height: 20)
@@ -154,18 +155,18 @@ struct StatItem: View {
     var hasStar: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .center, spacing: 4) {
             HStack(spacing: 2) {
                 Text(value)
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: 18, weight: .bold))
                 if hasStar {
                     Image(systemName: "star.fill")
-                        .font(.system(size: 10))
+                        .font(.system(size: 12))
                         .foregroundColor(.orange)
                 }
             }
             Text(label)
-                .font(.system(size: 8, weight: .bold))
+                .font(.system(size: 10, weight: .bold))
                 .foregroundColor(.gray)
         }
     }
