@@ -131,7 +131,7 @@ struct ChatView: View {
                 VStack(alignment: .leading, spacing: 15) {
                     HStack {
                         Spacer()
-                        Text(isBuying ? "Hey! Can I grab your \(product.name)? It's so cool!" : "Is it cool if I take your \(product.name) for the weekend?")
+                        Text(isBuying ? "Hellooo, Can I have your \(product.name)? It's really nice!" : "Wait this is nice, can I take your \(product.name) for the weekend?")
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
@@ -139,7 +139,7 @@ struct ChatView: View {
                     }
                     
                     HStack {
-                        Text("Yeah totally! It's yours. When do you want it?")
+                        Text("Yeah for sure, It's yours. When do you want it?")
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(15)
@@ -172,6 +172,6 @@ struct ChatView: View {
 
 #Preview {
     NavigationStack {
-        ItemDetailView(product: Product(name: "Sample Item", price: "Free", imageName: "tshirt.fill", ownerName: "Sarah"), isBuying: false)
+        ItemDetailView(product: Product(name: "Item", price: "Free", imageName: "tshirt.fill", ownerName: "Gale"), isBuying: false)
     }
 }

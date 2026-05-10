@@ -9,11 +9,29 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var selectedTab = "PLANNING"
+    @Namespace private var animation
     let products: [Product]
+    
+    // Mock data for different tabs
+    let rentedItems = [
+        Product(name: "Graphic T-Shirt", price: "Free", imageName: "tshirt.fill", ownerName: "Sarah"),
+        Product(name: "Denim Jacket", price: "Free", imageName: "jacket.fill", ownerName: "Mike")
+    ]
+    
+    let purchasedItems = [
+        Product(name: "Slim Fit Jeans", price: "Free", imageName: "shorts.fill", ownerName: "Alex"),
+        Product(name: "Leather Boots", price: "Free", imageName: "shoeprints.fill", ownerName: "John")
+    ]
+    
+    let savedItems = [
+        Product(name: "Summer Dress", price: "Free", imageName: "dresses.fill", ownerName: "Emma"),
+        Product(name: "Red Backpack", price: "Free", imageName: "backpack.fill", ownerName: "Kai"),
+        Product(name: "Cotton Hoodie", price: "Free", imageName: "jumper.fill", ownerName: "Fiona")
+    ]
     
     var body: some View {
         VStack(spacing: 0) {
-            // Centered App Header
+            // App Header
             ZStack {
                 Text("Renturn")
                     .font(.system(size: 24, weight: .bold))
@@ -35,10 +53,10 @@ struct ProfileView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     
-                    // Profile Header: Pic + Info Next to it
+                    // Profile Header
                     HStack(alignment: .center, spacing: 20) {
-                        // Profile Picture
                         ZStack {
+                            
                             
                             Image(systemName: "person.crop.circle.fill")
                                 .resizable()
@@ -46,19 +64,17 @@ struct ProfileView: View {
                                 .foregroundColor(.gray.opacity(0.2))
                                 .clipShape(Circle())
                             
-                           
+                          
                         }
                         
-                        // Username and Stats Row
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("christina_lee")
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Christina_lee")
                                 .font(.system(size: 22, weight: .black))
                             
-                            HStack(spacing: 25) {
-                                StatItem(value: "4.9", label: "RATING", hasStar: true)
+                            HStack(spacing: 16) {
+                                StatItem(value: "4.6", label: "RATING", hasStar: true)
                                 StatItem(value: "12", label: "LISTINGS")
-                                StatItem(value: "54", label: "FOLLOWERS")
-                                    
+                                StatItem(value: "35", label: "FOLLOWERS")
                             }
                         }
                         
@@ -68,8 +84,8 @@ struct ProfileView: View {
                     .padding(.top, 20)
                     
                     // Bio
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("Hello, explore my rentals for the sustainable soul and put my clothes to good use 🌿 ")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Hellooo, come and rent clothes for the sustainable soul and put then to good use 🌿 ")
                             .font(.system(size: 14))
                             .foregroundColor(.primary.opacity(0.8))
                             .lineSpacing(2)
@@ -77,11 +93,10 @@ struct ProfileView: View {
                     .padding(.horizontal)
                     .padding(.top, 25)
                     
-                    // Controlled gap
-                    Spacer().frame(height: 20)
+                    Spacer().frame(height: 25)
                     
                     // Action Buttons
-                    HStack(spacing: 12) {
+                    HStack(spacing: 10) {
                         Button(action: {}) {
                             HStack {
                                 Image(systemName: "plus")
@@ -117,35 +132,114 @@ struct ProfileView: View {
                     
                     Spacer().frame(height: 30)
                     
-                    // Custom Tab Bar
+                    // Animated Tab Bar
                     VStack(spacing: 0) {
-                        HStack {
-                            TabButton(title: "PLANNING", isSelected: selectedTab == "PLANNING") { selectedTab = "PLANNING" }
-                            TabButton(title: "RENTALS", isSelected: selectedTab == "RENTALS") { selectedTab = "RENTALS" }
-                            TabButton(title: "PURCHASE", isSelected: selectedTab == "PURCHASE") { selectedTab = "PURCHASE" }
-                            TabButton(title: "SAVED", isSelected: selectedTab == "SAVED") { selectedTab = "SAVED" }
+                        HStack(spacing: 0) {
+                            ForEach(["PLANNING", "RENTALS", "PURCHASE", "SAVED"], id: \.self) { tab in
+                                Button(action: {
+                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                        selectedTab = tab
+                                    }
+                                }) {
+                                    VStack(spacing: 12) {
+                                        Text(tab)
+                                            .font(.system(size: 10, weight: .bold))
+                                            .foregroundColor(selectedTab == tab ? Color(red: 0.1, green: 0.2, blue: 0.5) : .gray.opacity(0.6))
+                                            .frame(maxWidth: .infinity)
+                                        
+                                        ZStack {
+                                            if selectedTab == tab {
+                                                Rectangle()
+                                                    .fill(Color(red: 0.1, green: 0.2, blue: 0.5))
+                                                    .frame(height: 2)
+                                                    .matchedGeometryEffect(id: "underline", in: animation)
+                                            } else {
+                                                Rectangle()
+                                                    .fill(Color.clear)
+                                                    .frame(height: 2)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         Divider()
                     }
                     
                     // Tab Content
-                    if selectedTab == "PLANNING" {
-                        PlanningTabView()
-                    } else {
-                        VStack {
-                            Spacer(minLength: 100)
-                            Text("\(selectedTab) Content Coming Soon")
-                                .foregroundColor(.gray)
-                            Spacer()
+                    ZStack {
+                        if selectedTab == "PLANNING" {
+                            PlanningTabView()
+                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                        } else if selectedTab == "RENTALS" {
+                            ProfileGridView(products: rentedItems)
+                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                        } else if selectedTab == "PURCHASE" {
+                            ProfileGridView(products: purchasedItems)
+                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                        } else if selectedTab == "SAVED" {
+                            ProfileGridView(products: savedItems)
+                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
                         }
-                        .frame(maxWidth: .infinity, minHeight: 400)
-                        .background(Color(red: 0.96, green: 0.95, blue: 0.93))
                     }
                 }
             }
         }
         .background(Color.white)
-        .edgesIgnoringSafeArea(.bottom)
+        //.edgesIgnoringSafeArea(.bottom)
+    }
+}
+
+// New Grid View for Profile Tabs
+struct ProfileGridView: View {
+    let products: [Product]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("\(products.count) Items")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundColor(.gray)
+                .padding(.horizontal)
+                .padding(.top, 20)
+            
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16)
+            ], spacing: 16) {
+                ForEach(products) { product in
+                    NavigationLink(destination: ItemDetailView(product: product, isBuying: false)) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.gray.opacity(0.05))
+                                    .aspectRatio(1, contentMode: .fit)
+                                
+                                Image(systemName: product.imageName)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 60, height: 60)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(product.name)
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor(.primary)
+                                
+                                Text(product.price)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.horizontal, 4)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 30)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color(red: 0.96, green: 0.95, blue: 0.93))
     }
 }
 
@@ -169,27 +263,6 @@ struct StatItem: View {
                 .font(.system(size: 10, weight: .bold))
                 .foregroundColor(.gray)
         }
-    }
-}
-
-struct TabButton: View {
-    let title: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 12) {
-                Text(title)
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundColor(isSelected ? Color(red: 0.1, green: 0.2, blue: 0.5) : .gray.opacity(0.6))
-                
-                Rectangle()
-                    .fill(isSelected ? Color(red: 0.1, green: 0.2, blue: 0.5) : Color.clear)
-                    .frame(height: 2)
-            }
-        }
-        .frame(maxWidth: .infinity)
     }
 }
 
@@ -238,7 +311,7 @@ struct PlanningTabView: View {
                 HStack {
                     ForEach(["S", "M", "T", "W", "T", "F", "S"], id: \.self) { day in
                         Text(day)
-                            .font(.system(size: 15, weight: .bold))
+                            .font(.system(size: 10, weight: .bold))
                             .foregroundColor(.gray.opacity(0.4))
                             .frame(maxWidth: .infinity)
                     }
