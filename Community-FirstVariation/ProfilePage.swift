@@ -53,84 +53,87 @@ struct ProfileView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     
-                    // Profile Header
-                    HStack(alignment: .center, spacing: 20) {
-                        ZStack {
-                            
-                            
-                            Image(systemName: "person.crop.circle.fill")
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .foregroundColor(.gray.opacity(0.2))
-                                .clipShape(Circle())
-                            
-                          
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Christina_lee")
-                                .font(.system(size: 22, weight: .black))
-                            
-                            HStack(spacing: 16) {
-                                StatItem(value: "4.6", label: "RATING", hasStar: true)
-                                StatItem(value: "12", label: "LISTINGS")
-                                StatItem(value: "35", label: "FOLLOWERS")
+                    // Profile Header Section
+                    VStack(alignment: .leading, spacing: 0) {
+                        HStack(alignment: .center, spacing: 20) {
+                            ZStack {
+                                
+                                
+                                Image(systemName: "person.crop.circle.fill")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+                                    .foregroundColor(.gray.opacity(0.2))
+                                    .clipShape(Circle())
+                                
+                             
                             }
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 20)
-                    
-                    // Bio
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Hellooo, come and rent clothes for the sustainable soul and put then to good use 🌿 ")
-                            .font(.system(size: 14))
-                            .foregroundColor(.primary.opacity(0.8))
-                            .lineSpacing(2)
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 25)
-                    
-                    Spacer().frame(height: 25)
-                    
-                    // Action Buttons
-                    HStack(spacing: 10) {
-                        Button(action: {}) {
-                            HStack {
-                                Image(systemName: "plus")
-                                Text("List Item")
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Christina_lee")
+                                    .font(.system(size: 22, weight: .black))
+                                
+                                HStack(spacing: 16) {
+                                    StatItem(value: "4.6", label: "RATING", hasStar: true)
+                                    StatItem(value: "12", label: "LISTINGS")
+                                    StatItem(value: "25", label: "FOLLOWERS")
+                                }
                             }
-                            .font(.system(size: 15, weight: .bold))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
-                            .background(Color(red: 0.1, green: 0.2, blue: 0.5))
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
+                            
+                            Spacer()
                         }
+                        .padding(.horizontal)
+                        .padding(.top, 20)
                         
-                        Button(action: {}) {
-                            Text("Edit Profile")
-                                .font(.system(size: 15, weight: .semibold))
+                        // Bio
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Hellooo, come and rental for the sustainable soul and put my clothes to good use")
+                                .font(.system(size: 14))
+                                .foregroundColor(.primary.opacity(0.8))
+                                .lineSpacing(2)
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 25)
+                        
+                        Spacer().frame(height: 25)
+                        
+                        // Action Buttons
+                        HStack(spacing: 10) {
+                            Button(action: {}) {
+                                HStack {
+                                    Image(systemName: "plus")
+                                    Text("List Item")
+                                }
+                                .font(.system(size: 15, weight: .bold))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
-                                .background(Color.gray.opacity(0.08))
-                                .foregroundColor(.primary)
+                                .background(Color(red: 0.1, green: 0.2, blue: 0.5))
+                                .foregroundColor(.white)
                                 .cornerRadius(12)
+                            }
+                            
+                            Button(action: {}) {
+                                Text("Edit Profile")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 14)
+                                    .background(Color.gray.opacity(0.08))
+                                    .foregroundColor(.primary)
+                                    .cornerRadius(12)
+                            }
+                            
+                            Button(action: {}) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.system(size: 15))
+                                    .padding(14)
+                                    .background(Color.gray.opacity(0.08))
+                                    .cornerRadius(12)
+                            }
                         }
+                        .padding(.horizontal)
                         
-                        Button(action: {}) {
-                            Image(systemName: "square.and.arrow.up")
-                                .font(.system(size: 15))
-                                .padding(14)
-                                .background(Color.gray.opacity(0.08))
-                                .cornerRadius(12)
-                        }
+                        Spacer().frame(height: 30)
                     }
-                    .padding(.horizontal)
-                    
-                    Spacer().frame(height: 30)
+                    .background(Color.white)
                     
                     // Animated Tab Bar
                     VStack(spacing: 0) {
@@ -163,34 +166,43 @@ struct ProfileView: View {
                                 }
                             }
                         }
+                        .background(Color.white)
                         Divider()
                     }
                     
-                    // Tab Content
+                    // Tab Content Area with Beige Background extending down
                     ZStack {
-                        if selectedTab == "PLANNING" {
-                            PlanningTabView()
-                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
-                        } else if selectedTab == "RENTALS" {
-                            ProfileGridView(products: rentedItems)
-                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
-                        } else if selectedTab == "PURCHASE" {
-                            ProfileGridView(products: purchasedItems)
-                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
-                        } else if selectedTab == "SAVED" {
-                            ProfileGridView(products: savedItems)
-                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                        // Background color that fills the rest of the ScrollView
+                        Color(red: 0.96, green: 0.95, blue: 0.93)
+                            .edgesIgnoringSafeArea(.bottom)
+                        
+                        VStack(spacing: 0) {
+                            if selectedTab == "PLANNING" {
+                                PlanningTabView()
+                                    .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                            } else if selectedTab == "RENTALS" {
+                                ProfileGridView(products: rentedItems)
+                                    .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                            } else if selectedTab == "PURCHASE" {
+                                ProfileGridView(products: purchasedItems)
+                                    .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                            } else if selectedTab == "SAVED" {
+                                ProfileGridView(products: savedItems)
+                                    .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
+                            }
+                            
+                            // Extra space to ensure the background stays beige even if content is short
+                            Spacer(minLength: 500)
                         }
                     }
                 }
             }
         }
         .background(Color.white)
-        //.edgesIgnoringSafeArea(.bottom)
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
-// New Grid View for Profile Tabs
 struct ProfileGridView: View {
     let products: [Product]
     
@@ -211,14 +223,15 @@ struct ProfileGridView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color.gray.opacity(0.05))
+                                    .fill(Color.white) // Brighter background for items
                                     .aspectRatio(1, contentMode: .fit)
+                                    .shadow(color: Color.black.opacity(0.03), radius: 8, x: 0, y: 4)
                                 
                                 Image(systemName: product.imageName)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 60, height: 60)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.gray.opacity(0.6))
                             }
                             
                             VStack(alignment: .leading, spacing: 2) {
@@ -236,10 +249,8 @@ struct ProfileGridView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom, 30)
         }
         .frame(maxWidth: .infinity)
-        .background(Color(red: 0.96, green: 0.95, blue: 0.93))
     }
 }
 
@@ -335,11 +346,8 @@ struct PlanningTabView: View {
             .background(Color.white)
             .cornerRadius(20)
             .padding(.horizontal)
-            
-            Spacer(minLength: 80)
         }
         .frame(maxWidth: .infinity)
-        .background(Color(red: 0.96, green: 0.95, blue: 0.93))
     }
 }
 
