@@ -31,7 +31,8 @@ let mockThreads = [
     MessageThread(sender: "Aaron", lastMessage: "Sent you the address.", timestamp: "Last Week", isUnread: false),
 ]
 
-let mockProducts = [
+// Renting Mode Products
+let mockRentProducts = [
     Product(name: "Graphic T-Shirt", price: "Free", imageName: "tshirt.fill", ownerName: "Sarah"),
     Product(name: "Denim Jacket", price: "Free", imageName: "jacket.fill", ownerName: "Mike"),
     Product(name: "Slim Fit Jeans", price: "Free", imageName: "shorts.fill", ownerName: "Alex"),
@@ -42,6 +43,21 @@ let mockProducts = [
     Product(name: "Woolen Cap", price: "Free", imageName: "sparkles", ownerName: "Bob"),
 ]
 
+// Buying Mode Products (Different set for variety)
+let mockBuyProducts = [
+    Product(name: "Vintage Crewneck", price: "Free", imageName: "figure.walk", ownerName: "Chloe"),
+    Product(name: "Puffer Vest", price: "Free", imageName: "shield.fill", ownerName: "Liam"),
+    Product(name: "Cargo Pants", price: "Free", imageName: "square.grid.2x2.fill", ownerName: "Noah"),
+    Product(name: "Silk Scarf", price: "Free", imageName: "leaf.fill", ownerName: "Olivia"),
+    Product(name: "Canvas Sneakers", price: "Free", imageName: "pawprint.fill", ownerName: "Lucas"),
+    Product(name: "Knitted Sweater", price: "Free", imageName: "house.fill", ownerName: "Mia"),
+    Product(name: "Beanie Hat", price: "Free", imageName: "sun.max.fill", ownerName: "Zoe"),
+    Product(name: "Leather Belt", price: "Free", imageName: "link", ownerName: "James"),
+]
+
+// Legacy reference for other components
+let mockProducts = mockRentProducts
+
 struct ContentView: View {
     @State private var searchText = ""
     @State private var isBuyingEnabled = false
@@ -50,6 +66,11 @@ struct ContentView: View {
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
+    
+    // Select products based on mode
+    var currentProducts: [Product] {
+        isBuyingEnabled ? mockBuyProducts : mockRentProducts
+    }
     
     var body: some View {
         TabView {
@@ -74,8 +95,11 @@ struct ContentView: View {
                     // Filter Bar
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
-                            // Buying Toggle
-                            Button(action: { isBuyingEnabled.toggle() }) {
+                            Button(action: { 
+                                withAnimation(.easeInOut) {
+                                    isBuyingEnabled.toggle()
+                                }
+                            }) {
                                 HStack(spacing: 6) {
                                     Text("Buying")
                                         .font(.subheadline)
@@ -99,25 +123,24 @@ struct ContentView: View {
                             FilterMenu(title: "Size", options: ["XS", "S", "M", "L", "XL"])
                         }
                         .padding(.horizontal)
-                        .padding(.vertical, 8)
                     }
+                    .padding(.bottom, 15)
                     
+                    // Explore Grid
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
-                            ForEach(mockProducts) { product in
-                                NavigationLink {
-                                    ItemDetailView(product: product, isBuying: isBuyingEnabled)
-                                } label: {
-                                    VStack(alignment: .leading, spacing: 8) {
+                            ForEach(currentProducts) { product in
+                                NavigationLink(destination: ItemDetailView(product: product, isBuying: isBuyingEnabled)) {
+                                    VStack(alignment: .leading, spacing: 10) {
                                         ZStack {
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .fill(Color.gray.opacity(0.1))
-                                                .aspectRatio(1, contentMode: .fit)
+                                            RoundedRectangle(cornerRadius: 25)
+                                                .fill(Color.gray.opacity(0.05))
+                                                .frame(height: 180)
                                             
                                             Image(systemName: product.imageName)
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(width: 60, height: 60)
+                                                .frame(width: 80, height: 80)
                                                 .foregroundColor(.gray)
                                         }
                                         
@@ -156,68 +179,10 @@ struct ContentView: View {
                 Label("INBOX", systemImage: "bubble.left")
             }
             
-            ProfileView(products: mockProducts)
+            ProfileView(products: mockRentProducts)
             .tabItem {
                 Label("PROFILE", systemImage: "person")
             }
-        }
-    }
-}
-
-#Preview {
-    ContentView()
-}
-     
-
-struct InboxView: View {
-    var body: some View {
-        NavigationStack {
-            List(mockThreads) { thread in
-                NavigationLink(destination: ChatDetailView(thread: thread)) {
-                    HStack(spacing: 15) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.blue.opacity(0.1))
-                                .frame(width: 55, height: 55)
-                            
-                            Text(String(thread.sender.prefix(1)))
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundColor(.blue)
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text(thread.sender)
-                                    .font(.headline)
-                                Spacer()
-                                Text(thread.timestamp)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            
-                            HStack {
-                                Text(thread.lastMessage)
-                                    .font(.subheadline)
-                                    .foregroundColor(thread.isUnread ? .primary : .secondary)
-                                    .lineLimit(2)
-                                
-                                Spacer()
-                                
-                                if thread.isUnread {
-                                    Circle()
-                                        .fill(Color.blue)
-                                        .frame(width: 10, height: 10)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.vertical, 8)
-                }
-                .listRowSeparator(.hidden)
-            }
-            .listStyle(.plain)
-            .navigationTitle("INBOX")
         }
     }
 }
@@ -229,10 +194,10 @@ struct FilterMenu: View {
     var body: some View {
         Menu {
             ForEach(options, id: \.self) { option in
-                Button(option) { }
+                Button(option) {}
             }
         } label: {
-            HStack {
+            HStack(spacing: 4) {
                 Text(title)
                     .font(.subheadline)
                 Image(systemName: "chevron.down")
@@ -245,4 +210,49 @@ struct FilterMenu: View {
             .foregroundColor(.primary)
         }
     }
+}
+
+struct InboxView: View {
+    var body: some View {
+        NavigationStack {
+            List(mockThreads) { thread in
+                NavigationLink(destination: ChatDetailView(thread: thread)) {
+                    HStack(spacing: 15) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.blue.opacity(0.1))
+                                .frame(width: 55, height: 55)
+                            Text(String(thread.sender.prefix(1)))
+                                .font(.headline)
+                                .foregroundColor(.blue)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            HStack {
+                                Text(thread.sender)
+                                    .fontWeight(.bold)
+                                Spacer()
+                                Text(thread.timestamp)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Text(thread.lastMessage)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+                    .padding(.vertical, 5)
+                }
+                .listRowSeparator(.hidden)
+            }
+            .listStyle(.plain)
+            .navigationTitle("INBOX")
+        }
+    }
+}
+
+#Preview {
+    ContentView()
 }
