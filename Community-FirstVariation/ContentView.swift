@@ -24,7 +24,7 @@ struct MessageThread: Identifiable {
 }
 
 let mockThreads = [
-    MessageThread(sender: "Kai", lastMessage: "Can I grab that jacket??", timestamp: "10:30 AM", isUnread: true),
+    MessageThread(sender: "Kai", lastMessage: "Thanks for renting my shirt", timestamp: "10:30 AM", isUnread: true),
     MessageThread(sender: "Bob", lastMessage: "Thanks for the loan!!", timestamp: "Yesterday", isUnread: false),
     MessageThread(sender: "Fiona", lastMessage: "Can I come over at 5 to pick up?", timestamp: "Wed", isUnread: false),
     MessageThread(sender: "Sophie", lastMessage: "The dress looks so good!", timestamp: "Mon", isUnread: true),
@@ -45,13 +45,13 @@ let mockRentProducts = [
 
 // Buying Mode Products (Different set for variety)
 let mockBuyProducts = [
-    Product(name: "Vintage Crewneck", price: "Free", imageName: "figure.walk", ownerName: "Chloe"),
-    Product(name: "Puffer Vest", price: "Free", imageName: "shield.fill", ownerName: "Liam"),
-    Product(name: "Cargo Pants", price: "Free", imageName: "square.grid.2x2.fill", ownerName: "Noah"),
+    Product(name: "Vintage Crewneck", price: "Free", imageName: "tshirt.fill", ownerName: "Chloe"),
+    Product(name: "Puffer Vest", price: "Free", imageName: "vest.fill", ownerName: "Liam"),
+    Product(name: "Cargo Pants", price: "Free", imageName: "pants.fill", ownerName: "Noah"),
     Product(name: "Silk Scarf", price: "Free", imageName: "leaf.fill", ownerName: "Olivia"),
     Product(name: "Canvas Sneakers", price: "Free", imageName: "pawprint.fill", ownerName: "Lucas"),
-    Product(name: "Knitted Sweater", price: "Free", imageName: "house.fill", ownerName: "Mia"),
-    Product(name: "Beanie Hat", price: "Free", imageName: "sun.max.fill", ownerName: "Zoe"),
+    Product(name: "Knitted Sweater", price: "Free", imageName: "jacket.fill", ownerName: "Mia"),
+    Product(name: "Beanie Hat", price: "Free", imageName: "hat.fill", ownerName: "Zoe"),
     Product(name: "Leather Belt", price: "Free", imageName: "link", ownerName: "James"),
 ]
 
